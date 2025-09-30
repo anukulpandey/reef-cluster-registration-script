@@ -2,7 +2,7 @@
 set -e
 
 SECRET="blind art bundle write fashion equal vapor zero oppose system sunny success"
-NODE_PATH="/Users/anukul/Desktop/chain-upgrade/target/release/reef-node"
+NODE_PATH="../reef-node"
 RPC_URL="http://localhost:9944"
 
 echo ">>>>>>>>> Inspecting Accounts"
