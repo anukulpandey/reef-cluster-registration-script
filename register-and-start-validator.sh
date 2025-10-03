@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$#" -ne 6 ]; then
-    echo "Usage: $0 <MNEMONIC> <RPC_URL> <NODE_PATH> <VALIDATOR_PORT> <RPC_PORT> <BOOTNODE_MULTIADDR>"
+if [ "$#" -ne 7 ]; then
+    echo "Usage: $0 <MNEMONIC> <RPC_URL> <NODE_PATH> <VALIDATOR_PORT> <RPC_PORT> <BOOTNODE_MULTIADDR> <NODE_NAME>"
     exit 1
 fi
 
@@ -12,9 +12,9 @@ NODE_PATH="$3"
 VAL_PORT="$4"
 VAL_RPC_PORT="$5"
 BOOTNODE_MULTIADDR="$6"
+NODE_NAME="$7"
 
 BASE_PATH="./validator-db"
-NODE_NAME="validator1"
 
 echo ">>>>>>>>> Inspecting Accounts"
 for j in stash controller; do
