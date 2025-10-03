@@ -35,26 +35,26 @@ $NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//im_online"
 echo ">>>>>>>>> Inspecting AUTHORITY_DISCOVERY Key"
 $NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery"
 
-# Insert keys into specified RPC
-echo ">>>>>>>>> Inserting Keys into $REGISTER_URL"
-PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//babe" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $REGISTER_URL -H "Content-Type:application/json" \
-    -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"babe\", \"$MNEMONIC//babe\", \"$PUB\" ] }"
+# # Insert keys into specified RPC
+# echo ">>>>>>>>> Inserting Keys into $REGISTER_URL"
+# PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//babe" | sed -n -e 5p | cut -d ":" -f2 | xargs)
+# curl -s $REGISTER_URL -H "Content-Type:application/json" \
+#     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"babe\", \"$MNEMONIC//babe\", \"$PUB\" ] }"
 
-PUB=$($NODE_PATH key inspect --scheme ed25519 "$MNEMONIC//grandpa" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $REGISTER_URL -H "Content-Type:application/json" \
-    -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"gran\", \"$MNEMONIC//grandpa\", \"$PUB\" ] }"
+# PUB=$($NODE_PATH key inspect --scheme ed25519 "$MNEMONIC//grandpa" | sed -n -e 5p | cut -d ":" -f2 | xargs)
+# curl -s $REGISTER_URL -H "Content-Type:application/json" \
+#     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"gran\", \"$MNEMONIC//grandpa\", \"$PUB\" ] }"
 
-PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//im_online" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $REGISTER_URL -H "Content-Type:application/json" \
-    -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"imon\", \"$MNEMONIC//im_online\", \"$PUB\" ] }"
+# PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//im_online" | sed -n -e 5p | cut -d ":" -f2 | xargs)
+# curl -s $REGISTER_URL -H "Content-Type:application/json" \
+#     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"imon\", \"$MNEMONIC//im_online\", \"$PUB\" ] }"
 
-PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $REGISTER_URL -H "Content-Type:application/json" \
-    -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"audi\", \"$MNEMONIC//authority_discovery\", \"$PUB\" ] }"
+# PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery" | sed -n -e 5p | cut -d ":" -f2 | xargs)
+# curl -s $REGISTER_URL -H "Content-Type:application/json" \
+#     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"audi\", \"$MNEMONIC//authority_discovery\", \"$PUB\" ] }"
 
-echo ""
-echo ">>>>>>>>> All Keys Inserted Successfully into $REGISTER_URL!"
+# echo ""
+# echo ">>>>>>>>> All Keys Inserted Successfully into $REGISTER_URL!"
 
 # Start the validator
 echo ">>>>>>>>> Starting Validator Node"
