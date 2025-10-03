@@ -56,6 +56,8 @@ $NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery"
 # echo ""
 # echo ">>>>>>>>> All Keys Inserted Successfully into $REGISTER_URL!"
 
+$NODE_PATH build-spec --disable-default-bootnode --chain /reef-data/customSpec.json --raw > /reef-data/customSpecRaw.json
+
 # Start the validator
 echo ">>>>>>>>> Starting Validator Node"
 $NODE_PATH \
