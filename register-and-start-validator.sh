@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$#" -ne 7 ]; then
-    echo "Usage: $0 <MNEMONIC> <RPC_URL> <NODE_PATH> <VALIDATOR_PORT> <RPC_PORT> <BOOTNODE_MULTIADDR> <NODE_NAME>"
+if [ "$#" -ne 8 ]; then
+    echo "Usage: $0 <MNEMONIC> <RPC_URL> <NODE_PATH> <VALIDATOR_PORT> <RPC_PORT> <BOOTNODE_MULTIADDR> <NODE_NAME> <REGISTER_URL>"
     exit 1
 fi
 
@@ -13,6 +13,7 @@ VAL_PORT="$4"
 VAL_RPC_PORT="$5"
 BOOTNODE_MULTIADDR="$6"
 NODE_NAME="$7"
+REGISTER_URL="$8"
 
 BASE_PATH="./validator-db"
 
@@ -34,33 +35,26 @@ $NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//im_online"
 echo ">>>>>>>>> Inspecting AUTHORITY_DISCOVERY Key"
 $NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery"
 
-# Wait for Bootnode RPC to be available
-echo "Waiting for Bootnode RPC at $RPC_URL..."
-until curl -s $RPC_URL > /dev/null; do
-    sleep 1
-done
-echo "Bootnode RPC is up!"
-
-# Insert keys into Bootnode RPC
-echo ">>>>>>>>> Inserting Keys into Bootnode RPC"
+# Insert keys into specified RPC
+echo ">>>>>>>>> Inserting Keys into $REGISTER_URL"
 PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//babe" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $RPC_URL -H "Content-Type:application/json" \
+curl -s $REGISTER_URL -H "Content-Type:application/json" \
     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"babe\", \"$MNEMONIC//babe\", \"$PUB\" ] }"
 
 PUB=$($NODE_PATH key inspect --scheme ed25519 "$MNEMONIC//grandpa" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $RPC_URL -H "Content-Type:application/json" \
+curl -s $REGISTER_URL -H "Content-Type:application/json" \
     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"gran\", \"$MNEMONIC//grandpa\", \"$PUB\" ] }"
 
 PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//im_online" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $RPC_URL -H "Content-Type:application/json" \
+curl -s $REGISTER_URL -H "Content-Type:application/json" \
     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"imon\", \"$MNEMONIC//im_online\", \"$PUB\" ] }"
 
 PUB=$($NODE_PATH key inspect --scheme sr25519 "$MNEMONIC//authority_discovery" | sed -n -e 5p | cut -d ":" -f2 | xargs)
-curl -s $RPC_URL -H "Content-Type:application/json" \
+curl -s $REGISTER_URL -H "Content-Type:application/json" \
     -d "{ \"jsonrpc\":\"2.0\", \"id\":1, \"method\":\"author_insertKey\", \"params\": [ \"audi\", \"$MNEMONIC//authority_discovery\", \"$PUB\" ] }"
 
 echo ""
-echo ">>>>>>>>> All Keys Inserted Successfully into Bootnode!"
+echo ">>>>>>>>> All Keys Inserted Successfully into $REGISTER_URL!"
 
 # Start the validator
 echo ">>>>>>>>> Starting Validator Node"
